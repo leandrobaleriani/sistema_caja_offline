@@ -1,0 +1,36 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Egresos </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="background">
+  <form [formGroup]="egreso" (ngSubmit)="save()">
+    <ion-item>
+      <ion-label position="stacked">Fecha:</ion-label>
+      <ion-datetime
+        cancelText="Cancelar"
+        doneText="Listo"
+        display-format="DD/MM/YYYY"
+        picker-format="DD/MM/YYYY"
+        formControlName="fecha"
+        required
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Empleado/Proveedor:</ion-label>
+      <ion-input type="text" formControlName="nombre" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Monto:</ion-label>
+      <ion-input type="number" formControlName="monto" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Observaciones:</ion-label>
+      <ion-textarea formControlName="observaciones"></ion-textarea>
+    </ion-item>
+    <ion-button type="submit" expand="full" [disabled]="!egreso.valid"
+      >Registrar</ion-button
+    >
+  </form>
+</ion-content>

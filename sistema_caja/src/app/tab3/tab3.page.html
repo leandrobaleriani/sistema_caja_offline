@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Movimientos </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="background">
+  <form [formGroup]="busqueda" (ngSubmit)="buscar()">
+    <ion-item>
+      <ion-label position="stacked">Desde:</ion-label>
+      <ion-datetime
+        cancelText="Cancelar"
+        doneText="Listo"
+        display-format="DD/MM/YYYY"
+        picker-format="DD/MM/YYYY"
+        formControlName="desde"
+        required
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Hasta:</ion-label>
+      <ion-datetime
+        cancelText="Cancelar"
+        doneText="Listo"
+        display-format="DD/MM/YYYY"
+        picker-format="DD/MM/YYYY"
+        formControlName="hasta"
+        required
+      ></ion-datetime>
+    </ion-item>
+    <ion-button type="submit" expand="full" [disabled]="!busqueda.valid"
+      >Buscar</ion-button
+    >
+  </form>
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button color="light" (click)="imprimir()">
+        <ion-icon name="print-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="light" (click)="exportar()">
+        <ion-icon name="download-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+  <ion-virtual-scroll [items]="movimientos">
+		<ion-item *virtualItem="let m">
+			<ion-avatar slot="start">
+        <ion-icon name="enter-outline" *ngIf="m.operacion === 'INGRESO'"></ion-icon>
+        <ion-icon name="log-out-outline" *ngIf="m.operacion === 'EGRESO'"></ion-icon>
+			</ion-avatar>
+			<ion-label>
+				<h2>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}} - {{m.monto | currency}}</h2>
+        <h2>{{m.nombre}}</h2>
+        <h2>{{m.tipo}}</h2>
+        <h2>{{m.observaciones}}</h2>
+			</ion-label>
+		</ion-item>
+	</ion-virtual-scroll>
+</ion-content>
