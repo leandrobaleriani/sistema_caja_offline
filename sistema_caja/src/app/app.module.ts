@@ -15,6 +15,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { FirebaseService } from "./services/firebase.service";
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { File } from "@ionic-native/file/ngx";
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,7 +34,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    FirebaseService
+    FirebaseService,
+    FileOpener,
+    File
   ],
   bootstrap: [AppComponent],
 })

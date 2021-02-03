@@ -37,26 +37,176 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button color="light" (click)="imprimir()">
-        <ion-icon name="print-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="light" (click)="exportar()">
+      <ion-fab-button color="light" (click)="exportPdf()">
         <ion-icon name="download-outline"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
-  <ion-virtual-scroll [items]="movimientos">
-		<ion-item *virtualItem="let m">
-			<ion-avatar slot="start">
-        <ion-icon name="enter-outline" *ngIf="m.operacion === 'INGRESO'"></ion-icon>
-        <ion-icon name="log-out-outline" *ngIf="m.operacion === 'EGRESO'"></ion-icon>
-			</ion-avatar>
-			<ion-label>
-				<h2>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}} - {{m.monto | currency}}</h2>
-        <h2>{{m.nombre}}</h2>
-        <h2>{{m.tipo}}</h2>
-        <h2>{{m.observaciones}}</h2>
-			</ion-label>
-		</ion-item>
-	</ion-virtual-scroll>
+  <div class="printable-content">
+    <div class="printable-area" id="printable-area">
+      <h1>INGRESOS</h1>
+      <!--operaciones contado-->
+      <div *ngIf="movimientosContado.length > 0">
+        <h3>CONTADO</h3>
+        <table class="detail-table">
+          <tr>
+            <th width="15%">Fecha</th>
+            <th width="15%">Tipo</th>
+            <th width="15%">Monto</th>
+            <th width="20%">Nombre</th>
+            <th width="35%">Observaciones</th>
+          </tr>
+          <tr *ngFor="let m of movimientosContado">
+            <td>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}}</td>
+            <td>{{m.tipo}}</td>
+            <td>{{m.monto}}</td>
+            <td>{{m.nombre}}</td>
+            <td>{{m.observaciones}}</td>
+          </tr>
+        </table>
+        <table class="footer-table">
+          <tr>
+            <td width="80%">Total</td>
+            <td width="20%">{{montoContado}}</td>
+          </tr>
+        </table>
+      </div>
+      <!--operaciones debito-->
+      <div *ngIf="movimientosDebito.length > 0">
+        <h2>TARJETA DEBITO</h2>
+        <table class="detail-table">
+          <tr>
+            <th width="15%">Fecha</th>
+            <th width="15%">Tipo</th>
+            <th width="15%">Monto</th>
+            <th width="20%">Nombre</th>
+            <th width="35%">Observaciones</th>
+          </tr>
+          <tr *ngFor="let m of movimientosDebito">
+            <td>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}}</td>
+            <td>{{m.tipo}}</td>
+            <td>{{m.monto}}</td>
+            <td>{{m.nombre}}</td>
+            <td>{{m.observaciones}}</td>
+          </tr>
+        </table>
+        <table class="footer-table">
+          <tr>
+            <td width="80%">Total:</td>
+            <td width="20%">{{montoDebito}}</td>
+          </tr>
+        </table>
+      </div>
+      <!--operaciones credito-->
+      <div *ngIf="movimientosCredito.length > 0">
+        <h2>TARJETA CREDITO</h2>
+        <table class="detail-table">
+          <tr>
+            <th width="15%">Fecha</th>
+            <th width="15%">Tipo</th>
+            <th width="15%">Monto</th>
+            <th width="20%">Nombre</th>
+            <th width="35%">Observaciones</th>
+          </tr>
+          <tr *ngFor="let m of movimientosCredito">
+            <td>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}}</td>
+            <td>{{m.tipo}}</td>
+            <td>{{m.monto}}</td>
+            <td>{{m.nombre}}</td>
+            <td>{{m.observaciones}}</td>
+          </tr>
+        </table>
+        <table class="footer-table">
+          <tr>
+            <td width="80%">Total:</td>
+            <td width="20%">{{montoCredito}}</td>
+          </tr>
+          <tr></tr>
+        </table>
+      </div>
+      <!--operaciones Cheque-->
+      <div *ngIf="movimientosCheque.length > 0">
+        <h2>CHEQUES</h2>
+        <table class="detail-table">
+          <tr>
+            <th width="15%">Fecha</th>
+            <th width="15%">Tipo</th>
+            <th width="15%">Monto</th>
+            <th width="20%">Nombre</th>
+            <th width="35%">Observaciones</th>
+          </tr>
+          <tr *ngFor="let m of movimientosCheque">
+            <td>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}}</td>
+            <td>{{m.tipo}}</td>
+            <td>{{m.monto}}</td>
+            <td>{{m.nombre}}</td>
+            <td>{{m.observaciones}}</td>
+          </tr>
+        </table>
+        <table class="footer-table">
+          <tr>
+            <td width="80%">Total:</td>
+            <td width="20%">{{montoCheque}}</td>
+          </tr>
+        </table>
+      </div>
+      <!--operaciones cuenta corriente-->
+      <div *ngIf="movimientosCuenta.length > 0">
+        <h2>CUENTA CORRIENTE</h2>
+        <table class="detail-table">
+          <tr>
+            <th width="15%">Fecha</th>
+            <th width="15%">Tipo</th>
+            <th width="15%">Monto</th>
+            <th width="20%">Nombre</th>
+            <th width="35%">Observaciones</th>
+          </tr>
+          <tr *ngFor="let m of movimientosCuenta">
+            <td>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}}</td>
+            <td>{{m.tipo}}</td>
+            <td>{{m.monto}}</td>
+            <td>{{m.nombre}}</td>
+            <td>{{m.observaciones}}</td>
+          </tr>
+        </table>
+        <table class="footer-table">
+          <tr>
+            <td width="80%">Total:</td>
+            <td width="20%">{{montoCuenta}}</td>
+          </tr>
+        </table>
+      </div>
+      <h1>EGRESOS</h1>
+      <table class="detail-table" *ngIf="movimientosEgresos.length > 0">
+        <tr>
+          <th width="15%">Fecha</th>
+          <th width="15%">Tipo</th>
+          <th width="15%">Monto</th>
+          <th width="20%">Nombre</th>
+          <th width="35%">Observaciones</th>
+        </tr>
+        <tr *ngFor="let m of movimientosEgresos">
+          <td>{{m.fecha | date: 'dd/MM/yyyy hh:mm a'}}</td>
+          <td>{{m.tipo}}</td>
+          <td>{{m.monto}}</td>
+          <td>{{m.nombre}}</td>
+          <td>{{m.observaciones}}</td>
+        </tr>
+      </table>
+      <table class="footer-table">
+        <tr>
+          <td width="80%">Total Egresos:</td>
+          <td width="20%">{{montoEgresos}}</td>
+        </tr>
+        <tr>
+          <td width="80%">Total Ingresos:</td>
+          <td width="20%">{{montoIngresos}}</td>
+        </tr>
+        <tr>
+          <td width="80%">Diferencia:</td>
+          <td width="20%">{{montoIngresos - montoEgresos}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </ion-content>

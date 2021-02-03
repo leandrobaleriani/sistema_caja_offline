@@ -1,5 +1,7 @@
 {
   "name": "sistema_caja",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

@@ -1,7 +1,7 @@
 export class Movimiento {
     fecha: String;
     tipo: String;
-    monto: Number;
+    monto: number;
     nombre: String;
     observaciones: String;
     operacion: String;
