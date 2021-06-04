@@ -21,6 +21,10 @@ const routes: Routes = [
   {
     path: 'listado-ingreso',
     loadChildren: () => import('./tab1/tab1.module').then( m => m.Tab1PageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
   }
 ];
 @NgModule({

@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> Validar Usuario </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid style="height: 50%">
+    <form [formGroup]="login" (ngSubmit)="validateLogin()">
+      <ion-item>
+        <ion-label>Contraseña</ion-label>
+        <ion-input type="text" formControlName="pass" required></ion-input>
+      </ion-item>
+      <ion-button
+        expand="full"
+        color="primary"
+        type="submit"
+        [disabled]="!login.valid"
+        >Ingresar</ion-button
+      >
+    </form>
+  </ion-grid>
+</ion-content>

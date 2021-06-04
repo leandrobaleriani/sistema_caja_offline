@@ -1,19 +1,24 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { LoadingController, ToastController } from "@ionic/angular";
+import {
+  LoadingController,
+  ModalController,
+  ToastController,
+} from "@ionic/angular";
 import { Movimiento } from "../model/Movimiento";
 import { FirebaseService } from "../services/firebase.service";
 import { jsPDF } from "jspdf";
 import domtoimage from "dom-to-image";
 import { File, IWriteOptions } from "@ionic-native/file/ngx";
 import { FileOpener } from "@ionic-native/file-opener/ngx";
+import { LoginPage } from "../login/login.page";
 
 @Component({
   selector: "app-tab3",
   templateUrl: "tab3.page.html",
   styleUrls: ["tab3.page.scss"],
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit {
   busqueda: FormGroup;
   movimientosEgresos: Movimiento[] = [];
   movimientosCuenta: Movimiento[] = [];
@@ -35,7 +40,8 @@ export class Tab3Page {
     public toastController: ToastController,
     private firebaseService: FirebaseService,
     private file: File,
-    private fileOpener: FileOpener
+    private fileOpener: FileOpener,
+    private modalController: ModalController
   ) {
     this.busqueda = this.formBuilder.group({
       desde: new Date().toISOString(),
@@ -43,9 +49,18 @@ export class Tab3Page {
     });
   }
 
-  exportar() {}
+  ngOnInit() {
+    this.login();
+  }
 
-  imprimir() {}
+  async login() {
+    const loginFrm = await this.modalController.create({
+      component: LoginPage,
+      cssClass: "modal-login-class",
+    });
+
+    return await loginFrm.present();
+  }
 
   async buscar() {
     let loading = await this.loadingController.create({
@@ -148,14 +163,7 @@ export class Tab3Page {
         let imgHeight = (div.clientHeight * width) / div.clientWidth;
         let heightLeft = imgHeight;
         //Add image Url to PDF
-        doc.addImage(
-          dataUrl,
-          "PNG",
-          topMargin,
-          topMargin,
-          imageW,
-          imageH
-        );
+        doc.addImage(dataUrl, "PNG", topMargin, topMargin, imageW, imageH);
         for (let i = 1; i <= totalPages; i++) {
           doc.addPage([width, height], "p");
           doc.addImage(
