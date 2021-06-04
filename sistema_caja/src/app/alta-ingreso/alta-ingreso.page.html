@@ -1,0 +1,59 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="key">
+      <ion-button (click)="navigateBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> Crear/Editar Ingreso </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="background">
+  <form [formGroup]="ingreso" (ngSubmit)="save()">
+    <ion-item>
+      <ion-label position="stacked">Fecha:</ion-label>
+      <ion-datetime
+        cancelText="Cancelar"
+        doneText="Listo"
+        display-format="DD/MM/YYYY"
+        picker-format="DD/MM/YYYY"
+        formControlName="fecha"
+        required
+      ></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Forma de Pago:</ion-label>
+      <ion-select
+        value="CONTADO"
+        okText="Listo"
+        cancelText="Cancelar"
+        formControlName="tipo"
+      >
+        <ion-select-option value="CONTADO">CONTADO</ion-select-option>
+        <ion-select-option value="DEBITO">DEBITO</ion-select-option>
+        <ion-select-option value="CREDITO">CREDITO</ion-select-option>
+        <ion-select-option value="CHEQUE">CHEQUE</ion-select-option>
+        <ion-select-option value="CUENTA_CORRIENTE"
+          >CUENTA CORRIENTE</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Cliente:</ion-label>
+      <ion-input type="text" formControlName="nombre"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Monto:</ion-label>
+      <ion-input type="number" formControlName="monto" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Observaciones:</ion-label>
+      <ion-textarea formControlName="observaciones"></ion-textarea>
+    </ion-item>
+    <ion-button type="submit" expand="full" [disabled]="!ingreso.valid"
+      >Registrar</ion-button
+    >
+  </form>
+  <ion-button color="secondary" expand="full" (click)="verListado()">Listado de Ingresos</ion-button>
+</ion-content>

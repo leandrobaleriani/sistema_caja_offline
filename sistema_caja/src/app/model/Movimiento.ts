@@ -5,4 +5,5 @@ export class Movimiento {
     nombre: String;
     observaciones: String;
     operacion: String;
+    key: string;
 }

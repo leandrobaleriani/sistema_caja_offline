@@ -1,36 +1,30 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="navigateBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title> Egresos </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="background">
-  <form [formGroup]="egreso" (ngSubmit)="save()">
-    <ion-item>
-      <ion-label position="stacked">Fecha:</ion-label>
-      <ion-datetime
-        cancelText="Cancelar"
-        doneText="Listo"
-        display-format="DD/MM/YYYY"
-        picker-format="DD/MM/YYYY"
-        formControlName="fecha"
-        required
-      ></ion-datetime>
+<ion-content [fullscreen]="true">
+  <ion-fab vertical="middle" horizontal="end">
+    <ion-fab-button (click)="alta()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-virtual-scroll [items]="movimientos">
+    <ion-item *virtualItem="let m">
+      <ion-label>
+        <h1>{{m.fecha | date: 'dd/MM/yyyy'}}</h1>
+        <h2>{{m.monto | currency}}</h2>
+        <h2>{{m.nombre}}</h2>
+        <h2>{{m.observaciones}}</h2>
+      </ion-label>
+      <ion-button color="primary" (click)="editar(m.key)">Editar</ion-button>
+      <ion-button color="danger" (click)="eliminarMessage(m.key)">Eliminar</ion-button>
     </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Empleado/Proveedor:</ion-label>
-      <ion-input type="text" formControlName="nombre"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Monto:</ion-label>
-      <ion-input type="number" formControlName="monto" required></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label position="stacked">Observaciones:</ion-label>
-      <ion-textarea formControlName="observaciones"></ion-textarea>
-    </ion-item>
-    <ion-button type="submit" expand="full" [disabled]="!egreso.valid"
-      >Registrar</ion-button
-    >
-  </form>
+  </ion-virtual-scroll>
 </ion-content>

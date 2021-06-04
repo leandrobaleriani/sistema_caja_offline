@@ -83,27 +83,29 @@ export class Tab3Page {
       (data) => {
         this.reiniciarListados();
         data.forEach((m) => {
-          if (m.operacion == "INGRESO") {
-            if (m.tipo == "CONTADO") {
-              this.montoContado += m.monto;
-              this.movimientosContado.push(m);
-            } else if (m.tipo == "CHEQUE") {
-              this.montoCheque += m.monto;
-              this.movimientosCheque.push(m);
-            } else if (m.tipo == "DEBITO") {
-              this.montoDebito += m.monto;
-              this.movimientosDebito.push(m);
-            } else if (m.tipo == "CREDITO") {
-              this.montoCredito += m.monto;
-              this.movimientosCredito.push(m);
-            } else if (m.tipo == "CUENTA_CORRIENTE") {
-              this.montoCuenta += m.monto;
-              this.movimientosCuenta.push(m);
+          if (m.payload.val().operacion == "INGRESO") {
+            if (m.payload.val().tipo == "CONTADO") {
+              this.montoContado += m.payload.val().monto;
+              this.movimientosContado.push(m.payload.val());
+              this.montoIngresos += m.payload.val().monto;
+            } else if (m.payload.val().tipo == "CHEQUE") {
+              this.montoCheque += m.payload.val().monto;
+              this.movimientosCheque.push(m.payload.val());
+            } else if (m.payload.val().tipo == "DEBITO") {
+              this.montoDebito += m.payload.val().monto;
+              this.movimientosDebito.push(m.payload.val());
+              this.montoIngresos += m.payload.val().monto;
+            } else if (m.payload.val().tipo == "CREDITO") {
+              this.montoCredito += m.payload.val().monto;
+              this.movimientosCredito.push(m.payload.val());
+              this.montoIngresos += m.payload.val().monto;
+            } else if (m.payload.val().tipo == "CUENTA_CORRIENTE") {
+              this.montoCuenta += m.payload.val().monto;
+              this.movimientosCuenta.push(m.payload.val());
             }
-            this.montoIngresos += m.monto;
           } else {
-            this.movimientosEgresos.push(m);
-            this.montoEgresos += m.monto;
+            this.movimientosEgresos.push(m.payload.val());
+            this.montoEgresos += m.payload.val().monto;
           }
         });
         loading.dismiss();
@@ -123,30 +125,47 @@ export class Tab3Page {
     });
     await loading.present();
     const div = document.getElementById("printable-area");
+    let topMargin = 15;
+    let PDF_WIDTH = div.clientWidth + topMargin * 2;
+    let PDF_HEIGHT = PDF_WIDTH * 1.5 + topMargin * 2;
+    let imageW = div.clientWidth;
+    let imageH = div.clientHeight;
+    let totalPages = Math.ceil(imageH / PDF_HEIGHT) - 1;
+
     const options = {
       background: "white",
       height: div.clientHeight,
       width: div.clientWidth,
     };
-    
+
     domtoimage
       .toPng(div, options)
       .then((dataUrl) => {
         //Initialize JSPDF
-        let doc = new jsPDF("p", "mm", "a4");
+        let doc = new jsPDF("p", "pt", [PDF_WIDTH, PDF_HEIGHT]);
         let width = doc.internal.pageSize.getWidth();
         let height = doc.internal.pageSize.getHeight();
-        let imgHeight = div.clientHeight * width / div.clientWidth;
+        let imgHeight = (div.clientHeight * width) / div.clientWidth;
         let heightLeft = imgHeight;
         //Add image Url to PDF
-        doc.addImage(dataUrl, "PNG", 0, 0, width, imgHeight);
-        heightLeft -= height;
-
-        while (heightLeft >= 0) {
-          //position += heightLeft - imgHeight; // top padding for other pages
-          doc.addPage();
-          doc.addImage(dataUrl, 'PNG', 0, 0, width, imgHeight);
-          heightLeft -= height;
+        doc.addImage(
+          dataUrl,
+          "PNG",
+          topMargin,
+          topMargin,
+          imageW,
+          imageH
+        );
+        for (let i = 1; i <= totalPages; i++) {
+          doc.addPage([width, height], "p");
+          doc.addImage(
+            dataUrl,
+            "PNG",
+            topMargin,
+            -(PDF_HEIGHT * i) + topMargin * 4,
+            imageW,
+            imageH
+          );
         }
 
         let pdfOutput = doc.output();

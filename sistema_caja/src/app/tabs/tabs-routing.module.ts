@@ -9,11 +9,11 @@ const routes: Routes = [
     children: [
       {
         path: 'tab1',
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+        loadChildren: () => import('../alta-ingreso/alta-ingreso.module').then(m => m.AltaIngresoPageModule)
       },
       {
         path: 'tab2',
-        loadChildren: () => import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+        loadChildren: () => import('../alta-egreso/alta-egreso.module').then(m => m.AltaEgresoPageModule)
       },
       {
         path: 'tab3',

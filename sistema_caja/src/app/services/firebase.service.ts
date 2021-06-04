@@ -25,11 +25,28 @@ export class FirebaseService {
       .list<Movimiento>("movimientos/", (ref) =>
         ref.orderByChild("fecha").startAt(desde).endAt(hasta)
       )
-      .valueChanges();
-    /*return this.firestore
-      .collection<Movimiento>("movimientos", (ref) =>
-        ref.orderBy("fecha").startAt(desde).endAt(hasta)
+      .snapshotChanges();
+  }
+
+  update(movimiento: Movimiento, key: String) {
+    return this.afdb.object("movimientos/" + key).update(movimiento);
+  }
+
+  delete(key: string) {
+    return this.afdb.object("movimientos/" + key).remove();
+  }
+
+  getAll(operacion: string) {
+    return this.afdb
+      .list<Movimiento>("movimientos/", (ref) =>
+        ref.orderByChild("fecha")
       )
-      .snapshotChanges();*/
+      .snapshotChanges();
+  }
+
+  getByKey(key: string) {
+    return this.afdb
+      .object<Movimiento>("movimientos/" + key)
+      .valueChanges();
   }
 }
